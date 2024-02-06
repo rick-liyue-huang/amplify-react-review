@@ -71,3 +71,52 @@ and then we can see the amplify configuration in the project folder by using the
 ```bash
 amplify push -y
 ```
+
+after we add authentication to the app, we also need to modify the build settings
+
+```yml
+version: 1
+backend:
+  phases:
+    build:
+      commands:
+        - '# Execute Amplify CLI with the helper script'
+        - amplifyPush --simple
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - npm ci
+    build:
+      commands:
+        - npm run build
+  artifacts:
+    baseDirectory: build
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
+```
+
+and then in the 'Build image settings' we need to add package of 'Amplify CLI'. At last, in 'Select a backend environment to use with this branch' we select the 'staging' environment to redeploy the project.
+
+here we have to notice: we have to update the service role of the Amplify Console to allow the Amplify Console to create and manage resources in our AWS account. To do this, we need to go to the IAM console and find the service role for the Amplify Console. We then need to attach the `AmplifyServiceRolePolicy` policy to the service role. This policy allows the Amplify Console to create and manage resources in our AWS account.
+
+## Add a GraphQL API
+
+To add a GraphQL API to your app, you can use the `withAuthenticator` higher-order component from the @aws-amplify/ui-react library. This component wraps your app and provides a sign-in and sign-up experience for your users. To use it, import the `withAuthenticator` component and wrap your app component with it. and also need to run the following command to add a GraphQL API to your app:
+
+```bash
+amplify add api
+```
+
+and then we can see the amplify configuration in the project folder by using the following command:
+
+```bash
+? Please select from one of the below mentioned services: GraphQL
+Choose a schema template: Single object with fields (e.g., “Todo” with ID, name, description)
+Do you want to edit the schema now? (Y/n) · yes
+```
+
+We can modify the schema.graphql in 'backend/api/amplifyreactreview', and then we

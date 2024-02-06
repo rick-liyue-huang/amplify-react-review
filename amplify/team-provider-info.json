@@ -14,6 +14,9 @@
     "categories": {
       "auth": {
         "amplifyreactreviewdd25f7d3": {}
+      },
+      "api": {
+        "amplifyreactreview": {}
       }
     }
   }
