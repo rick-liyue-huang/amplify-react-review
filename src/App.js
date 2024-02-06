@@ -17,6 +17,7 @@ import {
   deletePost as deletePostMutation,
 } from './graphql/mutations';
 import { generateClient } from 'aws-amplify/api';
+import { uploadData, getUrl, remove } from 'aws-amplify/storage';
 
 const client = generateClient();
 
@@ -35,8 +36,8 @@ const App = ({ signOut }) => {
     await Promise.all(
       postsItems.map(async (post) => {
         if (post.image) {
-          // const url = await Storage.get(post.name);
-          // post.image = url;
+          const img = await getUrl({ key: post.name });
+          post.image = img.url;
         }
         return post;
       })
@@ -47,13 +48,17 @@ const App = ({ signOut }) => {
   async function createPost(event) {
     event.preventDefault();
     const form = new FormData(event.target);
-    // const image = form.get('image');
+    const image = form.get('image');
     const data = {
       name: form.get('name'),
       description: form.get('description'),
-      // image: image.name,
+      image: image,
     };
-    // if (!!data.image) await Storage.put(data.name, image);
+    if (!!data.image) {
+      const operation = uploadData({ key: data.name, data: image });
+      await operation.result;
+    }
+
     await client.graphql({
       query: createPostMutation,
       variables: { input: data },
@@ -65,7 +70,7 @@ const App = ({ signOut }) => {
   async function deletePost({ id, name }) {
     const newPosts = posts.filter((post) => post.id !== id);
     setPosts(newPosts);
-    // await Storage.remove(name);
+    await remove({ key: name });
     await client.graphql({
       query: deletePostMutation,
       variables: { input: { id } },

@@ -119,4 +119,18 @@ Choose a schema template: Single object with fields (e.g., “Todo” with ID, n
 Do you want to edit the schema now? (Y/n) · yes
 ```
 
-We can modify the schema.graphql in 'backend/api/amplifyreactreview', and then we
+We can modify the schema.graphql in 'backend/api/amplifyreactreview', and then push the changes to the cloud by using the following command:
+
+```bash
+amplify push -y
+```
+
+here we need to notice: we have to run `amplify push -y` to push the changes to the cloud, once we modify the schema.graphql. model
+
+## Add a Storage
+
+The same as the above, we can add a storage to the app by using the following command:
+
+```bash
+amplify add storage
+```
