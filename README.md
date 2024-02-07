@@ -4,6 +4,8 @@ This is a review of the Amplify React workshop.
 
 ## Getting Started
 
+In order to deploy the local project to AWS Amplify, we have two ways, first one is to use 'hosting environments' and connect the GitHub repository to the AWS Amplify, and the second one is to run `amplify init` to create the project in the AWS Amplify. Here we use the first way to deploy the project to AWS Amplify, and the project will be deployed in backend environments. here we use the first way.
+
 This project was bootstrapped with [Create React App], and uses the [Amplify CLI] to create and manage AWS resources. It also need to use the [Amplify library] to interact with the AWS resources. Before we create this project, we need to git push the project to the GitHub.
 
 To get started, you will need to install the Amplify CLI and configure it to use your AWS account. You will also need to install the Amplify library in your React project.
@@ -11,6 +13,7 @@ To get started, you will need to install the Amplify CLI and configure it to use
 ```bash
 npm install -g @aws-amplify/cli
 amplify configure
+amplify init
 npm install aws-amplify @aws-amplify/ui-react
 ```
 
@@ -133,4 +136,10 @@ The same as the above, we can add a storage to the app by using the following co
 
 ```bash
 amplify add storage
+```
+
+If we need to check the current amplify status under the this project we can use the following command:
+
+```bash
+amplify status
 ```
