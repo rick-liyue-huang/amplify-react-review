@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import './App.css';
 import '@aws-amplify/ui-react/styles.css';
 import SiteNav from './components/SiteNav';
@@ -6,6 +7,7 @@ import { Route, Routes } from 'react-router-dom';
 import Home from './components/Home';
 import LoginPage from './components/LoginPage';
 import RegisterPage from './components/RegisterPage';
+import Validation from './components/Validation';
 import Contacts from './components/Contacts';
 import {
   Authenticator,
@@ -22,6 +24,8 @@ Amplify.configure(awsExports);
 // import { Posts } from './components/Posts';
 
 const App = () => {
+  // console.log('isAuthenticated in App.js', isAuthenticated);
+
   const components = {
     Header() {
       const { tokens } = useTheme();
@@ -51,14 +55,15 @@ const App = () => {
 
   return (
     <Authenticator loginMechanism={['email']} components={components}>
-      {({ signOut }) => (
+      {() => (
         <div>
-          <SiteNav logout={signOut} />
+          <SiteNav />
           <Routes>
             <Route path='*' element={<Home />} />
             <Route path='/' exact={true} element={<Home />} />
-            {/* <Route path='/login' element={<LoginPage />} />
-          <Route path='/register' element={<RegisterPage />} /> */}
+            <Route path='/login' element={<LoginPage />} />
+            <Route path='/register' element={<RegisterPage />} />
+            <Route path='/validation' element={<Validation />} />
             <Route path='/contacts' element={<Contacts />} />
           </Routes>
           <SiteFooter />

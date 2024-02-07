@@ -18,7 +18,7 @@
     }
   },
   "auth": {
-    "amplifyreactreview95804a92": {
+    "amplifyreactreviewd1aabc9b": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {
@@ -34,9 +34,7 @@
           "EMAIL"
         ],
         "socialProviders": [],
-        "usernameAttributes": [
-          "EMAIL"
-        ],
+        "usernameAttributes": [],
         "verificationMechanisms": [
           "EMAIL"
         ]
@@ -46,7 +44,7 @@
     }
   },
   "storage": {
-    "contactstorage": {
+    "amplifyreactreviewstorage": {
       "dependsOn": [],
       "providerPlugin": "awscloudformation",
       "service": "S3"

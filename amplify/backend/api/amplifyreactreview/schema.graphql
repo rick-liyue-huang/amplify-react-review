@@ -8,5 +8,5 @@ type Contact @model {
   name: String!
   email: String!
   cell: String!
-  profilePicPath: String
+  profilePicPath: String!
 }

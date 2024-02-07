@@ -1,29 +1,28 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
-import { signIn } from 'aws-amplify/auth';
-
+import { confirmSignUp } from 'aws-amplify/auth';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
-function LoginPage({ updateAuthStatus }) {
+function Validation(props) {
   const navigate = useNavigate();
 
   const [username, setUserName] = useState('');
-  const [password, setPassword] = useState('');
+  const [authenticationCode, setAuthenticationCode] = useState('');
 
-  const handleLogin = async () => {
+  const handleRegisterConfirmation = async () => {
     try {
-      console.log('Login');
+      console.log('handleRegisterConfirmation');
       console.log(username);
-      console.log(password);
+      console.log(authenticationCode);
 
-      await signIn({ username, password });
-
-      updateAuthStatus(true);
+      const confirmationCode = authenticationCode;
+      await confirmSignUp({ username, confirmationCode });
+      props.updateAuthStatus(true);
       navigate('/contacts');
     } catch (err) {
       console.log(err);
@@ -34,7 +33,7 @@ function LoginPage({ updateAuthStatus }) {
     <Container>
       <Row className='px-4 my-5'>
         <Col>
-          <h1>Login</h1>
+          <h1>Validate</h1>
         </Col>
       </Row>
       <Row className='px-4 my-5'>
@@ -45,25 +44,26 @@ function LoginPage({ updateAuthStatus }) {
               <Form.Control
                 type='text'
                 placeholder='Enter User Name'
+                value={username}
                 onChange={(evt) => setUserName(evt.target.value)}
               />
             </Form.Group>
-            <Form.Group className='mb-3' controlId='formBasicPassword'>
-              <Form.Label>Password</Form.Label>
+            <Form.Group className='mb-3' controlId='formBasicText'>
+              <Form.Label>Authentication Code</Form.Label>
               <Form.Control
-                type='password'
-                minLength='8'
-                placeholder='Enter Password'
-                onChange={(evt) => setPassword(evt.target.value)}
+                type='text'
+                value={authenticationCode}
+                placeholder='Enter Authentication Code'
+                onChange={(evt) => setAuthenticationCode(evt.target.value)}
               />
             </Form.Group>
-            <Button variant='primary' type='button' onClick={handleLogin}>
-              Login &gt;&gt;
+            <Button
+              variant='primary'
+              type='button'
+              onClick={handleRegisterConfirmation}
+            >
+              Validate &gt;&gt;
             </Button>
-            &nbsp;&nbsp;
-            <Link to='/register'>
-              <Button variant='outline-primary'>Register</Button>
-            </Link>
             &nbsp;&nbsp;
             <Link to='/'>
               <Button variant='outline-primary'>Cancel</Button>
@@ -75,4 +75,4 @@ function LoginPage({ updateAuthStatus }) {
   );
 }
 
-export default LoginPage;
+export default Validation;

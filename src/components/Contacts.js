@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { uploadData, getUrl } from 'aws-amplify/storage';
 import { generateClient } from 'aws-amplify/api';
+import { getCurrentUser } from 'aws-amplify/auth';
 import { listContacts } from '../graphql/queries';
 import { createContact } from '../graphql/mutations';
 import Container from 'react-bootstrap/Container';
@@ -11,10 +12,12 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
 import { v4 as uuid } from 'uuid';
+import { useNavigate } from 'react-router-dom';
 
 const client = generateClient();
 
-function Contacts() {
+function Contacts({ isAuthenticated }) {
+  const navigate = useNavigate();
   const [contacts, setContacts] = useState([]);
   const [contactData, setContactData] = useState({
     name: '',
@@ -23,6 +26,20 @@ function Contacts() {
   });
   const [profilePic, setProfilePic] = useState('');
   const [profilePicPaths, setProfilePicPaths] = useState([]);
+  const [currentUser, setCurrentUser] = useState('');
+
+  useEffect(() => {
+    async function checkUser() {
+      try {
+        const { username } = await getCurrentUser();
+        setCurrentUser(username);
+        console.log('user', username);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    checkUser();
+  }, []);
 
   const getContacts = async () => {
     try {
@@ -57,10 +74,7 @@ function Contacts() {
   };
 
   useEffect(() => {
-    async function f() {
-      await getContacts();
-    }
-    f();
+    getContacts();
   }, []);
 
   const addNewContact = async () => {
@@ -95,91 +109,103 @@ function Contacts() {
         query: createContact,
         variables: { input: newContact },
       });
+      window.location.reload();
     } catch (err) {
       console.log('error', err);
     }
   };
 
   return (
-    <Container>
-      <Row className='px-4 my-5'>
-        <Col>
-          <h1>Contacts</h1>
-        </Col>
-      </Row>
-      <Row>
-        {contacts.map((contact, indx) => {
-          return (
-            <Col className='px-2 my-2' key={indx}>
-              <Card style={{ width: '12rem' }}>
-                <Card.Img src={profilePicPaths[indx]} variant='top' />
-                <Card.Body>
-                  <Card.Title>{contact.name}</Card.Title>
-                  <Card.Text>
-                    {contact.email}
-                    <br />
-                    {contact.cell}
-                  </Card.Text>
-                </Card.Body>
-              </Card>
+    <>
+      {currentUser ? (
+        <Container>
+          <Row className='px-4 my-5'>
+            <Col>
+              <h1>Contacts</h1>
             </Col>
-          );
-        })}
-      </Row>
-      <Row className='px-4 my-5'>
-        <Col sm={3}>
-          <h2>Add New Contact</h2>
-          <Form>
-            <Form.Group className='mb-3' controlId='formBasicText'>
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                type='text'
-                placeholder='Contact name'
-                value={contactData.name}
-                onChange={(evt) =>
-                  setContactData({ ...contactData, name: evt.target.value })
-                }
-              />
-            </Form.Group>
-            <Form.Group className='mb-3' controlId='formBasicEmail'>
-              <Form.Label>Email Address</Form.Label>
-              <Form.Control
-                type='email'
-                placeholder='Contact email'
-                value={contactData.email}
-                onChange={(evt) =>
-                  setContactData({ ...contactData, email: evt.target.value })
-                }
-              />
-            </Form.Group>
-            <Form.Group className='mb-3' controlId='formBasicText'>
-              <Form.Label>Cell</Form.Label>
-              <Form.Control
-                type='text'
-                placeholder='nnn-nnn-nnnn'
-                value={contactData.cell}
-                onChange={(evt) =>
-                  setContactData({ ...contactData, cell: evt.target.value })
-                }
-              />
-            </Form.Group>
-            <Form.Group className='mb-3' controlId='formBasicText'>
-              <Form.Label>Profile Pic</Form.Label>
-              <Form.Control
-                type='file'
-                accept='image/png'
-                value={contactData.profilePic}
-                onChange={(evt) => setProfilePic(evt.target.files[0])}
-              />
-            </Form.Group>
-            <Button variant='primary' type='button' onClick={addNewContact}>
-              Add Contact &gt;&gt;
-            </Button>
-            &nbsp;
-          </Form>
-        </Col>
-      </Row>
-    </Container>
+          </Row>
+          <Row>
+            {contacts.map((contact, indx) => {
+              return (
+                <Col className='px-2 my-2' key={indx}>
+                  <Card style={{ width: '12rem' }}>
+                    <Card.Img src={profilePicPaths[indx]} variant='top' />
+                    <Card.Body>
+                      <Card.Title>{contact.name}</Card.Title>
+                      <Card.Text>
+                        {contact.email}
+                        <br />
+                        {contact.cell}
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              );
+            })}
+          </Row>
+          <Row className='px-4 my-5'>
+            <Col sm={3}>
+              <h2>Add New Contact</h2>
+              <Form>
+                <Form.Group className='mb-3' controlId='formBasicText'>
+                  <Form.Label>Name</Form.Label>
+                  <Form.Control
+                    type='text'
+                    placeholder='Contact name'
+                    value={contactData.name}
+                    onChange={(evt) =>
+                      setContactData({ ...contactData, name: evt.target.value })
+                    }
+                  />
+                </Form.Group>
+                <Form.Group className='mb-3' controlId='formBasicEmail'>
+                  <Form.Label>Email Address</Form.Label>
+                  <Form.Control
+                    type='email'
+                    placeholder='Contact email'
+                    value={contactData.email}
+                    onChange={(evt) =>
+                      setContactData({
+                        ...contactData,
+                        email: evt.target.value,
+                      })
+                    }
+                  />
+                </Form.Group>
+                <Form.Group className='mb-3' controlId='formBasicText'>
+                  <Form.Label>Cell</Form.Label>
+                  <Form.Control
+                    type='text'
+                    placeholder='nnn-nnn-nnnn'
+                    value={contactData.cell}
+                    onChange={(evt) =>
+                      setContactData({ ...contactData, cell: evt.target.value })
+                    }
+                  />
+                </Form.Group>
+                <Form.Group className='mb-3' controlId='formBasicText'>
+                  <Form.Label>Profile Pic</Form.Label>
+                  <Form.Control
+                    type='file'
+                    accept='image/png'
+                    value={contactData.profilePic}
+                    onChange={(evt) => setProfilePic(evt.target.files[0])}
+                  />
+                </Form.Group>
+                <Button variant='primary' type='button' onClick={addNewContact}>
+                  Add Contact &gt;&gt;
+                </Button>
+                &nbsp;
+              </Form>
+            </Col>
+          </Row>
+        </Container>
+      ) : (
+        <div>
+          <Button onClick={() => navigate('/')}>Back to Home</Button>
+        </div>
+      )}
+    </>
   );
 }
 

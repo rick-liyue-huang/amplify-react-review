@@ -1,7 +1,7 @@
 {
-  "resourceName": "contactstorage",
-  "policyUUID": "6f330492",
-  "bucketName": "amplifyreactreviewstorage",
+  "resourceName": "amplifyreactreviewstorage",
+  "policyUUID": "eccc0df3",
+  "bucketName": "amplifyreactreviewcontactstorage",
   "storageAccess": "auth",
   "guestAccess": [],
   "authAccess": [

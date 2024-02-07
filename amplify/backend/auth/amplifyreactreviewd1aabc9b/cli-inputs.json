@@ -1,10 +1,10 @@
 {
   "version": "1",
   "cognitoConfig": {
-    "identityPoolName": "amplifyreactreview95804a92_identitypool_95804a92",
+    "identityPoolName": "amplifyreactreviewd1aabc9b_identitypool_d1aabc9b",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "amplif95804a92",
-    "userPoolName": "amplifyreactreview95804a92_userpool_95804a92",
+    "resourceNameTruncated": "amplifd1aabc9b",
+    "userPoolName": "amplifyreactreviewd1aabc9b_userpool_d1aabc9b",
     "autoVerifiedAttributes": [
       "email"
     ],
@@ -31,15 +31,12 @@
     "userpoolClientReadAttributes": [
       "email"
     ],
-    "userpoolClientLambdaRole": "amplif95804a92_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "amplifd1aabc9b_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "95804a92",
-    "resourceName": "amplifyreactreview95804a92",
+    "sharedId": "d1aabc9b",
+    "resourceName": "amplifyreactreviewd1aabc9b",
     "authSelections": "identityPoolAndUserPool",
     "useDefault": "default",
-    "usernameAttributes": [
-      "email"
-    ],
     "userPoolGroupList": [],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,

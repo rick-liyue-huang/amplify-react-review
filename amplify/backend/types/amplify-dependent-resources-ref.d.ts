@@ -7,7 +7,7 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "auth": {
-    "amplifyreactreview95804a92": {
+    "amplifyreactreviewd1aabc9b": {
       "AppClientID": "string",
       "AppClientIDWeb": "string",
       "IdentityPoolId": "string",
@@ -18,7 +18,7 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "storage": {
-    "contactstorage": {
+    "amplifyreactreviewstorage": {
       "BucketName": "string",
       "Region": "string"
     }
