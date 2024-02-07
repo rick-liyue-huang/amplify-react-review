@@ -1,8 +1,5 @@
 import { useState, useEffect } from 'react';
-import { API, graphqlOperation, Storage } from 'aws-amplify';
-
-import { listContacts } from '../../graphql/queries';
-import { createContact } from '../../graphql/mutations';
+// import { API, graphqlOperation, Storage } from 'aws-amplify';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -23,59 +20,59 @@ function Contacts() {
   const [profilePic, setProfilePic] = useState('');
   const [profilePicPaths, setProfilePicPaths] = useState([]);
 
-  const getContacts = async () => {
-    try {
-      const contactsData = await API.graphql(graphqlOperation(listContacts));
-      console.log(contactsData);
+  // const getContacts = async () => {
+  //   try {
+  //     const contactsData = await API.graphql(graphqlOperation(listContacts));
+  //     console.log(contactsData);
 
-      const contactsList = contactsData.data.listContacts.items;
-      setContacts(contactsList);
+  //     const contactsList = contactsData.data.listContacts.items;
+  //     setContacts(contactsList);
 
-      contacts.map(async (contact, indx) => {
-        const contactProfilePicPath = contacts[indx].profilePicPath;
-        try {
-          const contactProfilePicPathURI = await Storage.get(
-            contactProfilePicPath,
-            { expires: 60 }
-          );
-          setProfilePicPaths([...profilePicPaths, contactProfilePicPathURI]);
-        } catch (err) {
-          console.log('error', err);
-        }
-      });
-    } catch (err) {
-      console.log('error', err);
-    }
-  };
+  //     contacts.map(async (contact, indx) => {
+  //       const contactProfilePicPath = contacts[indx].profilePicPath;
+  //       try {
+  //         const contactProfilePicPathURI = await Storage.get(
+  //           contactProfilePicPath,
+  //           { expires: 60 }
+  //         );
+  //         setProfilePicPaths([...profilePicPaths, contactProfilePicPathURI]);
+  //       } catch (err) {
+  //         console.log('error', err);
+  //       }
+  //     });
+  //   } catch (err) {
+  //     console.log('error', err);
+  //   }
+  // };
 
-  useEffect(() => {
-    getContacts();
-  }, []);
+  // useEffect(() => {
+  //   getContacts();
+  // }, []);
 
-  const addNewContact = async () => {
-    try {
-      const { name, email, cell } = contactData;
+  // const addNewContact = async () => {
+  //   try {
+  //     const { name, email, cell } = contactData;
 
-      // Upload pic to S3
-      Storage.configure({ region: 'us-east-1' });
-      const { key } = await Storage.put(`${uuid()}.png`, profilePic, {
-        contentType: 'image/png',
-      });
+  //     // Upload pic to S3
+  //     Storage.configure({ region: 'us-east-1' });
+  //     const { key } = await Storage.put(`${uuid()}.png`, profilePic, {
+  //       contentType: 'image/png',
+  //     });
 
-      const newContact = {
-        id: uuid(),
-        name,
-        email,
-        cell,
-        profilePicPath: key,
-      };
+  //     const newContact = {
+  //       id: uuid(),
+  //       name,
+  //       email,
+  //       cell,
+  //       profilePicPath: key,
+  //     };
 
-      // Persist new Contact
-      await API.graphql(graphqlOperation(createContact, { input: newContact }));
-    } catch (err) {
-      console.log('error', err);
-    }
-  };
+  //     // Persist new Contact
+  //     await API.graphql(graphqlOperation(createContact, { input: newContact }));
+  //   } catch (err) {
+  //     console.log('error', err);
+  //   }
+  // };
 
   return (
     <Container>
@@ -148,7 +145,7 @@ function Contacts() {
                 onChange={(evt) => setProfilePic(evt.target.files[0])}
               />
             </Form.Group>
-            <Button variant='primary' type='button' onClick={addNewContact}>
+            <Button variant='primary' type='button'>
               Add Contact &gt;&gt;
             </Button>
             &nbsp;
