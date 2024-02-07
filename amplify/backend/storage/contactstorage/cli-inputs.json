@@ -1,0 +1,14 @@
+{
+  "resourceName": "contactstorage",
+  "policyUUID": "6f330492",
+  "bucketName": "amplifyreactreviewstorage",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "triggerFunction": "NONE",
+  "groupAccess": {}
+}
